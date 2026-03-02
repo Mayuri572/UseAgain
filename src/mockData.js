@@ -9,7 +9,7 @@ export const MOCK_USERS = [
 
 export const MOCK_LISTINGS = [
   {
-    id: 'p1', title: 'Vintage Wooden Bookshelf', category: 'Furniture', condition: 'Good',
+    id: 'p1', title: 'Vintage Wooden Sofa', category: 'Furniture', condition: 'Good',
     price: 1200, description: 'Solid teak 5-shelf bookcase. Minor scratches on the base. Excellent structure. Self-pickup preferred.',
     imageUrl: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600',
     sellerId: 'user1', sellerName: 'Priya Sharma', sellerPhoto: 'https://i.pravatar.cc/150?img=5',
@@ -19,7 +19,7 @@ export const MOCK_LISTINGS = [
   {
     id: 'p2', title: 'Samsung 32" LED TV', category: 'Electronics', condition: 'Like New',
     price: 8500, description: 'Bought 2 years ago, barely used. Remote included, wall mount not included. Works perfectly.',
-    imageUrl: 'https://images.unsplash.com/photo-1593359677879-a4bb92f4e7d9?w=600',
+    imageUrl: '/assets/products/tv_new.jpeg',
     sellerId: 'user2', sellerName: 'Arjun Mehta', sellerPhoto: 'https://i.pravatar.cc/150?img=11',
     swapAllowed: false, lat: 18.5314, lng: 73.8446, location: 'Deccan, Pune',
     createdAt: Date.now() - 172800000, views: 123, wishlistCount: 22, trustScore: 62,
@@ -43,7 +43,7 @@ export const MOCK_LISTINGS = [
   {
     id: 'p5', title: 'Philips Air Fryer 4.1L', category: 'Appliances', condition: 'Good',
     price: 3200, description: 'Used for 8 months. Cleaned thoroughly. All original accessories included.',
-    imageUrl: 'https://images.unsplash.com/photo-1648565881895-6de9b3d7c666?w=600',
+    imageUrl: '/assets/products/philips.jpg',
     sellerId: 'user1', sellerName: 'Priya Sharma', sellerPhoto: 'https://i.pravatar.cc/150?img=5',
     swapAllowed: true, swapFor: 'Instant pot or juicer', lat: 18.5292, lng: 73.8600, location: 'FC Road, Pune',
     createdAt: Date.now() - 432000000, views: 67, wishlistCount: 11, trustScore: 87,
@@ -51,7 +51,7 @@ export const MOCK_LISTINGS = [
   {
     id: 'p6', title: 'Kindle Paperwhite 10th Gen', category: 'Books & Media', condition: 'Like New',
     price: 5500, description: '8GB, Waterproof. Original box. Used for 6 months, in excellent condition.',
-    imageUrl: 'https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=600',
+    imageUrl: '/assets/products/kindle.webp',
     sellerId: 'user4', sellerName: 'Rahul Joshi', sellerPhoto: 'https://i.pravatar.cc/150?img=33',
     swapAllowed: true, swapFor: 'iPad or tablet', lat: 18.5200, lng: 73.8553, location: 'Shivajinagar, Pune',
     createdAt: Date.now() - 518400000, views: 34, wishlistCount: 5, trustScore: 45,
@@ -59,7 +59,7 @@ export const MOCK_LISTINGS = [
   {
     id: 'p7', title: 'Office Executive Chair', category: 'Furniture', condition: 'Fair',
     price: 2200, description: 'Ergonomic chair, gas lift works. Small tear on armrest padding. Seat cushion is firm.',
-    imageUrl: 'https://images.unsplash.com/photo-1589364222010-dd1d4d33c36b?w=600',
+    imageUrl: '/assets/products/chair.jpeg',
     sellerId: 'user5', sellerName: 'Kavya Nair', sellerPhoto: 'https://i.pravatar.cc/150?img=44',
     swapAllowed: false, lat: 18.5155, lng: 73.8501, location: 'Karve Nagar, Pune',
     createdAt: Date.now() - 604800000, views: 28, wishlistCount: 3, trustScore: 78,
@@ -75,7 +75,7 @@ export const MOCK_LISTINGS = [
   {
     id: 'p9', title: 'Yoga Mat + Blocks Set', category: 'Sports', condition: 'Like New',
     price: 850, description: 'Premium 6mm TPE mat with 2 cork blocks and strap. Used 5-6 times only.',
-    imageUrl: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?w=600',
+    imageUrl: '/assets/products/yoga_mat.jpg',
     sellerId: 'user5', sellerName: 'Kavya Nair', sellerPhoto: 'https://i.pravatar.cc/150?img=44',
     swapAllowed: false, lat: 18.5185, lng: 73.8460, location: 'Erandwane, Pune',
     createdAt: Date.now() - 777600000, views: 19, wishlistCount: 4, trustScore: 78,
@@ -91,7 +91,7 @@ export const MOCK_LISTINGS = [
   {
     id: 'p11', title: 'Honda Activa 5G (2019)', category: 'Vehicle', condition: 'Good',
     price: 42000, description: 'Single owner scooter, insurance valid, recent service done. RC and all documents available.',
-    imageUrl: 'https://images.unsplash.com/photo-1558981806-ec527fa84c39?w=600',
+    imageUrl: '/assets/products/bike.jpg',
     sellerId: 'user2', sellerName: 'Arjun Mehta', sellerPhoto: 'https://i.pravatar.cc/150?img=11',
     swapAllowed: false, lat: 18.5260, lng: 73.8505, location: 'JM Road, Pune',
     createdAt: Date.now() - 920000000, views: 52, wishlistCount: 7, trustScore: 62,
@@ -161,3 +161,4 @@ export const MOCK_CHATS = [
     ],
   },
 ];
+

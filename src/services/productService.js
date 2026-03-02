@@ -49,7 +49,7 @@ export const productService = {
     return newListing;
   },
 
-  // ✅ Added this to fix your error
+  // Added this to fix your error
   createListing: async (data, userId) => {
     return productService.addListing(data, userId);
   },

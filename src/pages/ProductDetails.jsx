@@ -165,7 +165,7 @@ export default function ProductDetails() {
         {/* Image */}
         <div>
           <div className="aspect-square bg-bg-neutral rounded-2xl overflow-hidden">
-            <img src={product.imageUrl} alt={product.title}
+            <img src={product.imageUrl || product.images?.[0] || 'https://placehold.co/600x600?text=No+Image'} alt={product.title}
               className="w-full h-full object-cover"
               onError={e => { e.target.src = 'https://placehold.co/600x600?text=No+Image' }}
             />
