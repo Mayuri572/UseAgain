@@ -1,242 +1,173 @@
-// Home.jsx — Main browse/listing feed page
-import { useState, useEffect, useCallback } from 'react'
-import { useSearchParams, Link } from 'react-router-dom'
-import ProductCard, { ProductCardSkeleton } from '../components/ProductCard'
-import QuoteSlider from '../components/QuoteSlider'
-import { productService } from "../services/productService";
-import { getUserLocation, DEFAULT_LOCATION } from '../utils/geoUtils'
-import { MOCK_CATEGORIES } from '../mockData'
-import { HiFilter, HiRefresh, HiLocationMarker, HiPlus } from 'react-icons/hi'
-import toast from 'react-hot-toast'
+import { Link, useNavigate } from "react-router-dom";
+import QuoteSlider from "../components/QuoteSlider.jsx";
+import { MOCK_CATEGORIES, MOCK_IMPACT_STATS } from "../mockData.js";
+import { HiSparkles, HiGlobeAlt, HiCollection } from "react-icons/hi";
+import { usePoints } from "../context/PointsContext.jsx";
+import { motion } from "framer-motion";
+import { ShoppingBag, RefreshCw, Heart } from "lucide-react";
 
 export default function Home() {
-  const [searchParams] = useSearchParams()
-  const searchQuery = searchParams.get('search') || ''
-
-  const [listings, setListings] = useState([])
-  const [filtered, setFiltered] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [userLocation, setUserLocation] = useState(DEFAULT_LOCATION)
-  const [locationLoading, setLocationLoading] = useState(false)
-
-  // Filters
-  const [category, setCategory] = useState('')
-  const [maxPrice, setMaxPrice] = useState('')
-  const [swapOnly, setSwapOnly] = useState(false)
-  const [sortBy, setSortBy] = useState('recent')
-  const [showFilters, setShowFilters] = useState(false)
-
-  useEffect(() => {
-    loadListings()
-    tryGetLocation()
-  }, [])
-
-  const loadListings = async () => {
-    setLoading(true)
-    try {
-     const data = await productService.getListings();
-      setListings(data)
-    } catch {
-      toast.error('Failed to load listings')
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const tryGetLocation = async () => {
-    setLocationLoading(true)
-    try {
-      const loc = await getUserLocation()
-      setUserLocation({ ...loc, label: 'Your location' })
-    } catch { /* use default */ }
-    setLocationLoading(false)
-  }
-
-  // Filter & search effect
-  useEffect(() => {
-    let result = [...listings]
-
-    if (searchQuery) {
-      const q = searchQuery.toLowerCase()
-      result = result.filter(l =>
-        l.title?.toLowerCase().includes(q) ||
-        l.description?.toLowerCase().includes(q) ||
-        l.category?.toLowerCase().includes(q)
-      )
-    }
-    if (category) result = result.filter(l => l.category === category)
-    if (maxPrice) result = result.filter(l => l.price <= parseInt(maxPrice))
-    if (swapOnly) result = result.filter(l => l.swapAllowed)
-
-    if (sortBy === 'price-asc') result.sort((a, b) => a.price - b.price)
-    else if (sortBy === 'price-desc') result.sort((a, b) => b.price - a.price)
-    else result.sort((a, b) => b.createdAt - a.createdAt)
-
-    setFiltered(result)
-  }, [listings, searchQuery, category, maxPrice, swapOnly, sortBy])
-
-  const clearFilters = () => {
-    setCategory('')
-    setMaxPrice('')
-    setSwapOnly(false)
-    setSortBy('recent')
-  }
-
-  const hasFilters = category || maxPrice || swapOnly || sortBy !== 'recent'
+  const navigate = useNavigate();
+  const { points } = usePoints();
 
   return (
-    <main>
-      {/* Hero */}
-      <section className="bg-gradient-to-br from-primary via-primary to-primary-dark text-white py-16 px-6" aria-label="Hero section">
-        <div className="max-w-4xl mx-auto text-center">
-          <h1 className="font-heading text-4xl sm:text-5xl font-bold mb-4 leading-tight">
-            Buy • Sell • Swap • Donate
-            <br />
-            <span className="text-accent">— locally</span>
-          </h1>
-          <p className="text-white/80 text-lg mb-8 max-w-2xl mx-auto">
-            Join Pune's hyperlocal circular marketplace. Give items a second life, earn rewards, and reduce waste in your community.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <a href="#listings" className="px-6 py-3 bg-white text-primary font-bold rounded-xl hover:bg-accent transition shadow-lg hover:shadow-xl scale-hover">
-              Browse Listings
-            </a>
-            <Link to="/add-product" className="px-6 py-3 bg-accent/20 border border-white/30 text-white font-bold rounded-xl hover:bg-accent/30 transition">
-              + Post Item
+    <main className="bg-bg-neutral text-text-neutral">
+      <section className="bg-gradient-to-br from-primary via-primary to-primary-dark text-white py-12 sm:py-14 px-4">
+        <div className="max-w-6xl mx-auto">
+          <div className="max-w-3xl">
+            <p className="text-xs sm:text-sm tracking-widest text-white/70 uppercase mb-2">
+              Buy • Sell • Swap • Donate
+            </p>
+            <h1 className="font-poppins font-bold text-5xl sm:text-6xl leading-tight bg-gradient-to-r from-white to-accent bg-clip-text text-transparent">
+              UseAgain
+            </h1>
+            <p className="mt-3 text-white/85 text-base sm:text-lg max-w-2xl">
+              A hyperlocal circular marketplace for campuses and neighborhoods. Reuse more, waste less, and keep value in the community.
+            </p>
+            <div className="mt-6">
+              <Link to="/product" className="btn-primary inline-flex items-center">
+                Browse Listings
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <QuoteSlider />
+
+      <section className="py-8 px-4">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="font-poppins text-xl font-semibold text-gray-900">Browse by Category</h2>
+            <Link to="/product" className="text-sm text-primary hover:underline">
+              View all
             </Link>
           </div>
 
-          {/* Impact mini-stats */}
-          <div className="mt-10 grid grid-cols-3 gap-4 max-w-md mx-auto">
-            {[
-              { value: '342+', label: 'Items Traded' },
-              { value: '1.8t', label: 'Waste Saved' },
-              { value: '1,284', label: 'Members' },
-            ].map(({ value, label }) => (
-              <div key={label} className="text-center">
-                <p className="text-2xl font-bold text-accent">{value}</p>
-                <p className="text-xs text-white/70">{label}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Quote Slider */}
-      <QuoteSlider />
-
-      {/* Categories */}
-      <section className="py-10 px-4" aria-label="Browse categories">
-        <div className="max-w-7xl mx-auto">
-          <h2 className="font-heading font-bold text-xl text-gray-900 mb-5">Browse by Category</h2>
-          <div className="grid grid-cols-4 sm:grid-cols-8 gap-3">
-            {MOCK_CATEGORIES.map(({ name, icon, count }) => (
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4">
+            {MOCK_CATEGORIES.map((category) => (
               <button
-                key={name}
-                onClick={() => setCategory(category === name ? '' : name)}
-                aria-pressed={category === name}
-                className={`flex flex-col items-center gap-2 p-3 rounded-2xl border-2 transition cursor-pointer ${
-                  category === name
-                    ? 'border-primary bg-accent/20 shadow'
-                    : 'border-gray-100 bg-white hover:border-primary/30 hover:bg-bg-neutral'
-                }`}
+                key={category.name}
+                type="button"
+                onClick={() => navigate(`/product/${encodeURIComponent(category.name)}`)}
+                className="group rounded-xl border border-gray-100 bg-white overflow-hidden shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-150"
+                aria-label={`Browse ${category.name} listings`}
               >
-                <span className="text-2xl" aria-hidden="true">{icon}</span>
-                <span className="text-xs font-medium text-gray-700 text-center leading-tight">{name}</span>
-                <span className="text-xs text-gray-400">{count}</span>
+                <img
+                  src={category.image}
+                  alt={`${category.name} category`}
+                  className="w-full h-24 object-cover"
+                  loading="lazy"
+                />
+                <div className="p-3 text-left">
+                  <p className="text-sm font-semibold text-gray-900">{category.name}</p>
+                  <p className="text-xs text-gray-500">{category.count} items</p>
+                </div>
               </button>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Listings */}
-      <section id="listings" className="py-6 px-4 pb-16" aria-label="Product listings">
+      <section className="pb-8 px-4">
         <div className="max-w-7xl mx-auto">
-          {/* Header */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-            <div>
-              <h2 className="font-heading font-bold text-xl text-gray-900">
-                {searchQuery ? `Results for "${searchQuery}"` : category || 'All Listings'}
-              </h2>
-              <div className="flex items-center gap-1.5 text-sm text-gray-500 mt-1">
-                <HiLocationMarker className="w-4 h-4" />
-                <span>{locationLoading ? 'Detecting location...' : userLocation.label}</span>
-              </div>
-            </div>
+          <motion.div
+            className="grid grid-cols-1 lg:grid-cols-3 gap-6"
+            variants={ctaContainerVariants}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, amount: 0.2 }}
+          >
+            <ActionCard
+              title="Explore Products"
+              description="Browse reusable items near you."
+              buttonLabel="Explore Products"
+              to="/product"
+              accent="shadow-[0_8px_24px_rgba(20,184,166,0.16)] hover:shadow-[0_16px_38px_rgba(20,184,166,0.22)]"
+              Icon={ShoppingBag}
+              iconClassName="text-teal-600"
+            />
+            <ActionCard
+              title="Swap With Campus"
+              description="Exchange items within 5 km."
+              buttonLabel="Start Swapping"
+              to="/swap"
+              accent="shadow-[0_8px_24px_rgba(16,185,129,0.16)] hover:shadow-[0_16px_38px_rgba(16,185,129,0.22)]"
+              Icon={RefreshCw}
+              iconClassName="text-emerald-600"
+            />
+            <ActionCard
+              title="Donate & Earn Points"
+              description="Give items and earn green points."
+              buttonLabel="Donate Now"
+              to="/donate"
+              accent="shadow-[0_8px_24px_rgba(132,204,22,0.16)] hover:shadow-[0_16px_38px_rgba(132,204,22,0.22)]"
+              Icon={Heart}
+              iconClassName="text-lime-600"
+            />
+          </motion.div>
+        </div>
+      </section>
 
-            <div className="flex items-center gap-2">
-              {/* Sort */}
-              <select value={sortBy} onChange={e => setSortBy(e.target.value)}
-                aria-label="Sort listings"
-                className="text-sm border border-gray-200 rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-primary">
-                <option value="recent">Most Recent</option>
-                <option value="price-asc">Price: Low to High</option>
-                <option value="price-desc">Price: High to Low</option>
-              </select>
-
-              {/* Filter toggle */}
-              <button onClick={() => setShowFilters(!showFilters)}
-                aria-expanded={showFilters}
-                className={`flex items-center gap-1.5 px-3 py-2 rounded-lg border text-sm font-medium transition ${
-                  hasFilters ? 'border-primary bg-primary/5 text-primary' : 'border-gray-200 bg-white text-gray-600 hover:border-primary/50'
-                }`}>
-                <HiFilter className="w-4 h-4" />
-                Filters {hasFilters && '•'}
-              </button>
-            </div>
+      <section className="pb-10 px-4">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <StatCard icon={<HiGlobeAlt className="w-5 h-5 text-blue-600" />} label="CO₂ Saved" value={`${MOCK_IMPACT_STATS.co2Saved.toLocaleString()} kg`} />
+            <StatCard icon={<HiCollection className="w-5 h-5 text-emerald-600" />} label="Items Reused" value={MOCK_IMPACT_STATS.itemsTraded.toLocaleString()} />
+            <StatCard icon={<HiSparkles className="w-5 h-5 text-amber-500" />} label="Green Points Earned" value={points.toLocaleString()} />
           </div>
-
-          {/* Filter panel */}
-          {showFilters && (
-            <div className="bg-white border border-gray-100 rounded-xl p-4 mb-6 flex flex-wrap gap-4 items-end animate-slide-up">
-              <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">Max Price (₹)</label>
-                <input type="number" value={maxPrice} onChange={e => setMaxPrice(e.target.value)}
-                  placeholder="e.g. 5000"
-                  className="border border-gray-200 rounded-lg px-3 py-2 text-sm w-32 focus:outline-none focus:ring-2 focus:ring-primary" />
-              </div>
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" checked={swapOnly} onChange={e => setSwapOnly(e.target.checked)}
-                  className="w-4 h-4 text-primary rounded focus:ring-primary" />
-                <span className="text-sm font-medium text-gray-700">Swap available only</span>
-              </label>
-              {hasFilters && (
-                <button onClick={clearFilters} className="flex items-center gap-1 text-sm text-gray-500 hover:text-primary">
-                  <HiRefresh className="w-4 h-4" /> Clear filters
-                </button>
-              )}
-            </div>
-          )}
-
-          {/* Grid */}
-          {loading ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-              {Array(8).fill(0).map((_, i) => <ProductCardSkeleton key={i} />)}
-            </div>
-          ) : filtered.length === 0 ? (
-            <div className="text-center py-20">
-              <p className="text-5xl mb-4">🔍</p>
-              <h3 className="font-heading font-bold text-lg text-gray-700 mb-2">No listings found</h3>
-              <p className="text-gray-500 mb-6">Try adjusting your filters or be the first to list something!</p>
-              <Link to="/add-product" className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-xl font-semibold hover:bg-primary-dark transition">
-                <HiPlus className="w-5 h-5" /> Post First Item
-              </Link>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-              {filtered.map(product => (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                  userLat={userLocation.lat}
-                  userLng={userLocation.lng}
-                />
-              ))}
-            </div>
-          )}
         </div>
       </section>
     </main>
-  )
+  );
+}
+
+function StatCard({ icon, label, value }) {
+  return (
+    <article className="rounded-xl bg-white border border-gray-100 p-4 shadow-sm">
+      <div className="flex items-center gap-2">
+        <span>{icon}</span>
+        <p className="text-sm text-gray-600">{label}</p>
+      </div>
+      <p className="mt-2 font-poppins text-xl font-semibold text-gray-900">{value}</p>
+    </article>
+  );
+}
+
+const ctaContainerVariants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.12, delayChildren: 0.05 } },
+};
+
+const ctaItemVariants = {
+  hidden: { opacity: 0, y: 24 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.45, ease: "easeOut" } },
+};
+
+function ActionCard({ title, description, buttonLabel, to, accent, Icon, iconClassName }) {
+  return (
+    <motion.article
+      variants={ctaItemVariants}
+      className={`relative overflow-hidden rounded-3xl p-8 min-h-[320px] bg-gradient-to-br from-teal-50 via-emerald-50 to-white border border-teal-100/70 shadow-lg hover:scale-105 transition-all duration-300 ${accent}`}
+    >
+      <div className="pointer-events-none absolute -top-8 -right-8 w-36 h-36 rounded-full bg-primary/10 blur-2xl" />
+      <div className="pointer-events-none absolute -bottom-10 -left-10 w-40 h-40 rounded-full bg-emerald-200/30 blur-2xl" />
+
+      <div className="relative z-10 flex h-full flex-col items-center text-center">
+        <div className="mb-6 rounded-2xl bg-white/85 p-4 shadow-sm">
+          <Icon className={`w-14 h-14 ${iconClassName}`} />
+        </div>
+
+        <h3 className="font-poppins text-2xl font-semibold text-gray-900 mb-2">{title}</h3>
+        <p className="text-base text-gray-600 mb-8">{description}</p>
+
+        <Link
+          to={to}
+          className="mt-auto inline-flex items-center justify-center rounded-lg bg-primary text-white px-5 py-2.5 font-semibold shadow hover:bg-primary-dark hover:-translate-y-0.5 transition-all duration-200"
+        >
+          {buttonLabel}
+        </Link>
+      </div>
+    </motion.article>
+  );
 }

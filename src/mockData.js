@@ -88,6 +88,22 @@ export const MOCK_LISTINGS = [
     swapAllowed: true, swapFor: 'Other books or board games', lat: 18.5240, lng: 73.8480, location: 'Model Colony, Pune',
     createdAt: Date.now() - 864000000, views: 41, wishlistCount: 6, trustScore: 45,
   },
+  {
+    id: 'p11', title: 'Honda Activa 5G (2019)', category: 'Vehicle', condition: 'Good',
+    price: 42000, description: 'Single owner scooter, insurance valid, recent service done. RC and all documents available.',
+    imageUrl: 'https://images.unsplash.com/photo-1558981806-ec527fa84c39?w=600',
+    sellerId: 'user2', sellerName: 'Arjun Mehta', sellerPhoto: 'https://i.pravatar.cc/150?img=11',
+    swapAllowed: false, lat: 18.5260, lng: 73.8505, location: 'JM Road, Pune',
+    createdAt: Date.now() - 920000000, views: 52, wishlistCount: 7, trustScore: 62,
+  },
+  {
+    id: 'p12', title: 'Sterling Silver Pendant Set', category: 'Jewellery', condition: 'Like New',
+    price: 1800, description: 'Elegant silver pendant with chain and matching earrings. Worn twice, includes original box.',
+    imageUrl: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=600',
+    sellerId: 'user5', sellerName: 'Kavya Nair', sellerPhoto: 'https://i.pravatar.cc/150?img=44',
+    swapAllowed: true, swapFor: 'Handcrafted decor items', lat: 18.5174, lng: 73.8478, location: 'Erandwane, Pune',
+    createdAt: Date.now() - 980000000, views: 36, wishlistCount: 5, trustScore: 78,
+  },
 ]
 
 export const MOCK_IMPACT_STATS = {
@@ -99,14 +115,16 @@ export const MOCK_IMPACT_STATS = {
 }
 
 export const MOCK_CATEGORIES = [
-  { name: 'Electronics', icon: '📱', count: 45 },
-  { name: 'Furniture', icon: '🪑', count: 32 },
-  { name: 'Clothing', icon: '👕', count: 67 },
-  { name: 'Books & Media', icon: '📚', count: 28 },
-  { name: 'Sports', icon: '⚽', count: 19 },
-  { name: 'Appliances', icon: '🏠', count: 24 },
-  { name: 'Music', icon: '🎸', count: 11 },
-  { name: 'Toys & Kids', icon: '🧸', count: 38 },
+  { name: 'Electronics', image: '/assets/categories/Electronic.png', count: 45 },
+  { name: 'Furniture', image: '/assets/categories/Furniture.png', count: 32 },
+  { name: 'Clothing', image: '/assets/categories/Clothes.png', count: 67 },
+  { name: 'Books & Media', image: '/assets/categories/books_new.png', count: 28 },
+  { name: 'Sports', image: '/assets/categories/sports.png', count: 19 },
+  { name: 'Appliances', image: '/assets/categories/Appliances.png', count: 24 },
+  { name: 'Music', image: '/assets/categories/music_new.png', count: 11 },
+  { name: 'Toys & Kids', image: '/assets/categories/Toys.png', count: 38 },
+  { name: 'Vehicle', image: '/assets/categories/vehicle.jpeg', count: 14 },
+  { name: 'Jewellery', image: '/assets/categories/jewellery.png', count: 17 },
 ]
 
 export const MOCK_QUOTES = [

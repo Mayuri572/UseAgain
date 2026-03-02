@@ -1,57 +1,40 @@
-import { useState, useEffect } from "react";
-
-const QUOTES = [
-  { text: "The greenest product is the one already made.", author: "Circular Economy Principle" },
-  { text: "Every item you buy used saves new resources from being extracted.", author: "Ellen MacArthur Foundation" },
-  { text: "Sharing is the new owning. Community is the new commerce.", author: "UseAgain Manifesto" },
-  { text: "One person's surplus is another's treasure — and our planet's relief.", author: "UseAgain Community" },
-  { text: "Small acts of reuse, multiplied by thousands, create enormous change.", author: "Green Economy Insight" },
-];
+import { useEffect, useMemo, useState } from "react";
+import { MOCK_QUOTES } from "../mockData.js";
 
 export default function QuoteSlider() {
-  const [current, setCurrent] = useState(0);
-  const [fading, setFading] = useState(false);
+  const [index, setIndex] = useState(0);
+  const quote = MOCK_QUOTES[index];
+  const intervalMs = useMemo(() => (quote?.text?.length > 120 ? 6000 : 4500), [quote]);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setFading(true);
-      setTimeout(() => {
-        setCurrent(prev => (prev + 1) % QUOTES.length);
-        setFading(false);
-      }, 400);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const quote = QUOTES[current];
+    const timer = setInterval(() => {
+      setIndex((prev) => (prev + 1) % MOCK_QUOTES.length);
+    }, intervalMs);
+    return () => clearInterval(timer);
+  }, [intervalMs]);
 
   return (
-    <section className="bg-primary text-white py-10 px-4" aria-live="polite" aria-label="Rotating quotes">
-      <div className="max-w-3xl mx-auto text-center">
-        <div
-          className="transition-all duration-400"
-          style={{ opacity: fading ? 0 : 1, transform: fading ? "translateY(-8px)" : "translateY(0)" }}
-        >
-          <blockquote>
-            <p className="font-poppins text-xl sm:text-2xl font-semibold leading-relaxed mb-3">
-              "{quote.text}"
-            </p>
-            <footer className="text-accent text-sm font-medium">— {quote.author}</footer>
-          </blockquote>
-        </div>
+    <section className="px-4 py-6 bg-bg-neutral" aria-live="polite">
+      <div className="max-w-6xl mx-auto">
+        <div className="rounded-2xl border border-gray-200 bg-white/90 backdrop-blur-md shadow-sm p-6 sm:p-7">
+          <p className="text-lg sm:text-xl leading-relaxed text-gray-900 font-medium min-h-[80px]">
+            “{quote.text}”
+          </p>
+          <p className="mt-2 text-sm text-gray-500">— {quote.author}</p>
 
-        {/* Dots */}
-        <div className="flex justify-center gap-2 mt-6" role="tablist" aria-label="Quote navigation">
-          {QUOTES.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => { setFading(true); setTimeout(() => { setCurrent(i); setFading(false); }, 400); }}
-              className={`w-2 h-2 rounded-full transition-all duration-300 ${i === current ? "bg-accent w-6" : "bg-white/40"}`}
-              role="tab"
-              aria-selected={i === current}
-              aria-label={`Quote ${i + 1}`}
-            />
-          ))}
+          <div className="mt-4 flex items-center gap-2" role="tablist" aria-label="Quote indicators">
+            {MOCK_QUOTES.map((q, i) => (
+              <button
+                key={`${q.author}-${i}`}
+                type="button"
+                onClick={() => setIndex(i)}
+                className={`h-2 rounded-full transition-all ${i === index ? "w-6 bg-primary" : "w-2 bg-gray-300"}`}
+                aria-label={`Show quote ${i + 1}`}
+                aria-selected={i === index}
+                role="tab"
+              />
+            ))}
+          </div>
         </div>
       </div>
     </section>

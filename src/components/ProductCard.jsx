@@ -38,7 +38,7 @@ export default function ProductCard({ listing, product }) {
     <article className="card group overflow-hidden flex flex-col animate-fade-in" aria-label={`Listing: ${title}`}>
       {/* Image */}
       <div className="relative overflow-hidden bg-gray-100 aspect-[4/3]">
-        <Link to={`/product/${id}`}>
+        <Link to={`/item/${id}`}>
           <img
             src={imgError ? "https://via.placeholder.com/400x300?text=No+Image" : (images[0] || "https://via.placeholder.com/400x300?text=No+Image")}
             alt={title}
@@ -76,7 +76,7 @@ export default function ProductCard({ listing, product }) {
 
       {/* Content */}
       <div className="p-3 flex flex-col flex-1 gap-2">
-        <Link to={`/product/${id}`} className="group/title">
+        <Link to={`/item/${id}`} className="group/title">
           <h3 className="font-semibold text-text-neutral text-sm leading-snug line-clamp-2 group-hover/title:text-primary transition-colors">
             {title}
           </h3>
@@ -114,7 +114,7 @@ export default function ProductCard({ listing, product }) {
             Buy Now
           </button>
           <Link
-            to={`/product/${id}`}
+            to={`/item/${id}`}
             className="p-1.5 border border-gray-200 rounded-lg hover:bg-bg-neutral transition-colors"
             aria-label="Chat with seller"
           >

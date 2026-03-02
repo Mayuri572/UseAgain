@@ -12,11 +12,13 @@ import Register from "./pages/Register.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import AddProduct from "./pages/AddProduct.jsx";
 import ProductDetails from "./pages/ProductDetails.jsx";
-import Cart from "./pages/Cart.jsx";
+import OrdersPage from "./pages/OrdersPage.jsx";
 import Wishlist from "./pages/Wishlist.jsx";
 import Swap from "./pages/Swap.jsx";
 import RewardStore from "./pages/RewardStore.jsx";
 import Profile from "./pages/Profile.jsx";
+import ListingsPage from "./pages/ListingsPage.jsx";
+import DonatePage from "./pages/DonatePage.jsx";
 
 export default function App() {
   return (
@@ -37,12 +39,15 @@ export default function App() {
               <main className="flex-1">
                 <Routes>
                   <Route path="/" element={<Home />} />
+                  <Route path="/product" element={<ListingsPage />} />
+                  <Route path="/product/:category" element={<ListingsPage />} />
+                  <Route path="/donate" element={<DonatePage />} />
                   <Route path="/login" element={<Login />} />
                   <Route path="/register" element={<Register />} />
-                  <Route path="/product/:id" element={<ProductDetails />} />
+                  <Route path="/item/:id" element={<ProductDetails />} />
                   <Route path="/swap" element={<Swap />} />
                   <Route path="/rewards" element={<RewardStore />} />
-                  <Route path="/cart" element={<Cart />} />
+                  <Route path="/cart" element={<OrdersPage />} />
                   <Route path="/wishlist" element={<Wishlist />} />
                   <Route path="/dashboard" element={
                     <ProtectedRoute><Dashboard /></ProtectedRoute>

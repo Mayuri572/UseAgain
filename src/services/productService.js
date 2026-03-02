@@ -5,6 +5,7 @@ import { USE_MOCK } from "../firebase.js";
 import { MOCK_LISTINGS } from "../mockData.js";
 
 let mockListings = [...MOCK_LISTINGS];
+let mockOrders = [];
 
 // ─── Mock Implementation ───────────────────────────────────────────────────
 
@@ -12,7 +13,10 @@ export const productService = {
   getListings: async (filters = {}) => {       
     await delay(300);
     let results = [...mockListings];
-    if (filters.category) results = results.filter(l => l.category === filters.category);
+    if (filters.category) {
+      const filterCategory = String(filters.category).toLowerCase();
+      results = results.filter(l => String(l.category || "").toLowerCase() === filterCategory);
+    }
     if (filters.swapAllowed) results = results.filter(l => l.swapAllowed);
     if (filters.minPrice !== undefined) results = results.filter(l => l.price >= filters.minPrice);
     if (filters.maxPrice !== undefined) results = results.filter(l => l.price <= filters.maxPrice);
@@ -73,21 +77,45 @@ export const productService = {
     if (listing) listing.views = (listing.views || 0) + 1;
   },
 
-  createOrder: async (listingId, buyerId, paymentMethod) => {
+  createOrder: async (listingId, buyerId, paymentMethod, sellerId) => {
     await delay(400);
-    return {
+    const listing = mockListings.find((l) => l.id === listingId);
+    const order = {
       id: `order_${Date.now()}`,
       listingId,
       buyerId,
+      sellerId: sellerId || listing?.sellerId || null,
+      productTitle: listing?.title || "Listing",
+      sellerName: listing?.sellerName || "Seller",
       paymentMethod,
       status: paymentMethod === "secure" ? "HELD" : "PENDING_PICKUP",
       createdAt: new Date().toISOString(),
     };
+    mockOrders.unshift(order);
+    return order;
   },
 
   completeOrder: async (orderId) => {
     await delay(300);
+    const idx = mockOrders.findIndex((o) => o.id === orderId);
+    if (idx > -1) {
+      mockOrders[idx] = { ...mockOrders[idx], status: "COMPLETED" };
+      return mockOrders[idx];
+    }
     return { id: orderId, status: "COMPLETED" };
+  },
+
+  getUserOrders: async (userId) => {
+    await delay(250);
+    return mockOrders.filter((o) => o.buyerId === userId || o.sellerId === userId);
+  },
+
+  updateOrderStatus: async (orderId, status) => {
+    await delay(250);
+    const idx = mockOrders.findIndex((o) => o.id === orderId);
+    if (idx === -1) throw new Error("Order not found");
+    mockOrders[idx] = { ...mockOrders[idx], status };
+    return mockOrders[idx];
   },
 
   createSwapRequest: async (listingId, requesterId, offeredListingId) => {
@@ -125,8 +153,8 @@ export const createListing = (data, userId) =>
 
 export const createOrder = (payloadOrListingId, maybeBuyerId, maybePaymentMethod) => {
   if (typeof payloadOrListingId === "object" && payloadOrListingId !== null) {
-    const { listingId, buyerId, paymentMethod } = payloadOrListingId;
-    return productService.createOrder(listingId, buyerId, paymentMethod);
+    const { listingId, buyerId, paymentMethod, sellerId } = payloadOrListingId;
+    return productService.createOrder(listingId, buyerId, paymentMethod, sellerId);
   }
   return productService.createOrder(payloadOrListingId, maybeBuyerId, maybePaymentMethod);
 };
@@ -138,3 +166,6 @@ export const createSwapRequest = (payloadOrListingId, maybeRequesterId, maybeOff
   }
   return productService.createSwapRequest(payloadOrListingId, maybeRequesterId, maybeOfferedListingId);
 };
+
+export const getUserOrders = (userId) => productService.getUserOrders(userId);
+export const updateOrderStatus = (orderId, status) => productService.updateOrderStatus(orderId, status);

@@ -40,7 +40,7 @@ export default function Cart() {
             <img src={item.imageUrl} alt={item.title} className="w-20 h-20 object-cover rounded-xl"
               onError={e => { e.target.src = 'https://placehold.co/80x80?text=📦' }} />
             <div className="flex-1 min-w-0">
-              <Link to={`/product/${item.id}`} className="font-semibold text-gray-900 hover:text-primary line-clamp-1">{item.title}</Link>
+              <Link to={`/item/${item.id}`} className="font-semibold text-gray-900 hover:text-primary line-clamp-1">{item.title}</Link>
               <p className="text-sm text-gray-500">{item.condition} · {item.category}</p>
               <p className="text-primary font-bold mt-1">₹{item.price?.toLocaleString('en-IN')}</p>
             </div>
