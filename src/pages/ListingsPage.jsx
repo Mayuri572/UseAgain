@@ -14,7 +14,6 @@ export default function ListingsPage() {
   const [loading, setLoading] = useState(true);
   const [listings, setListings] = useState([]);
   const [userLocation, setUserLocation] = useState(DEFAULT_LOCATION);
-  const [locationReady, setLocationReady] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -24,8 +23,6 @@ export default function ListingsPage() {
         if (active) setUserLocation(loc);
       } catch {
         // Keep default location
-      } finally {
-        if (active) setLocationReady(true);
       }
     };
     init();
@@ -65,11 +62,11 @@ export default function ListingsPage() {
       }
     };
 
-    if (locationReady) load();
+    load();
     return () => {
       active = false;
     };
-  }, [decodedCategory, search, userLocation, locationReady]);
+  }, [decodedCategory, search, userLocation]);
 
   const title = useMemo(() => {
     if (decodedCategory) return decodedCategory;

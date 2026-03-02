@@ -39,7 +39,7 @@ export default function Navbar() {
         <div className="flex items-center h-16 gap-4">
           <Link to="/" className="flex items-center gap-2 shrink-0" aria-label="UseAgain Home">
             <MdOutlineRecycling className="text-primary text-3xl" />
-            <span className="font-poppins font-bold text-xl text-primary hidden sm:block">
+            <span className="font-poppins font-bold text-lg sm:text-xl text-primary block">
               Use<span className="text-text-neutral">Again</span>
             </span>
           </Link>

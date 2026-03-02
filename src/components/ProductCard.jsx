@@ -28,7 +28,7 @@ export default function ProductCard({ listing, product }) {
 
   const item = listing || product || {};
   const {
-    id, title, price, condition, category, images = [],
+    id, title, price, condition, category, imageUrl, images = [],
     sellerName, sellerTrustScore = 0, swapAllowed,
     distance, wishlistCount = 0,
   } = item;
@@ -41,7 +41,11 @@ export default function ProductCard({ listing, product }) {
       <div className="relative overflow-hidden bg-gray-100 aspect-[4/3]">
         <Link to={`/item/${id}`}>
           <img
-            src={imgError ? "https://via.placeholder.com/400x300?text=No+Image" : (images[0] || "https://via.placeholder.com/400x300?text=No+Image")}
+            src={
+              imgError
+                ? "https://via.placeholder.com/400x300?text=No+Image"
+                : (imageUrl || images[0] || "https://via.placeholder.com/400x300?text=No+Image")
+            }
             alt={title}
             onError={() => setImgError(true)}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
