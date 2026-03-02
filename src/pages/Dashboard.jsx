@@ -60,10 +60,15 @@ export default function Dashboard() {
           </h1>
           <p className="text-gray-500 text-sm">See your impact and the community's progress</p>
         </div>
-        <Link to="/rewards" className="hidden sm:flex items-center gap-2 bg-accent-yellow/30 text-amber-700 px-4 py-2 rounded-xl text-sm font-semibold border border-amber-200 hover:bg-accent-yellow/50 transition">
-          <HiStar className="w-4 h-4" />
-          {points} pts — Redeem Rewards
-        </Link>
+        <div className="hidden sm:flex items-center gap-2">
+          <Link to="/product" className="btn-primary text-sm items-center gap-2 inline-flex">
+            Continue Shopping
+          </Link>
+          <Link to="/rewards" className="items-center gap-2 bg-accent-yellow/30 text-amber-700 px-4 py-2 rounded-xl text-sm font-semibold border border-amber-200 hover:bg-accent-yellow/50 transition inline-flex">
+            <HiStar className="w-4 h-4" />
+            {points} pts — Redeem Rewards
+          </Link>
+        </div>
       </div>
 
       {/* Community Stats */}
