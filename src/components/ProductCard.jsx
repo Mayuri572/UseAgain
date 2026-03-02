@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { HiOutlineHeart, HiHeart, HiOutlineLocationMarker, HiOutlineChatAlt2,
   HiOutlineRefresh, HiOutlineBadgeCheck } from "react-icons/hi";
 import { useCart } from "../context/CartContext.jsx";
 import { formatDistance } from "../utils/geoUtils.js";
 import { getTrustBadgeClasses } from "../utils/trustScore.js";
+import toast from "react-hot-toast";
 
 const CONDITION_COLORS = {
   "like-new": "bg-green-100 text-green-700",
@@ -23,7 +24,7 @@ const CONDITION_LABELS = {
 export default function ProductCard({ listing, product }) {
   const [wishlisted, setWishlisted] = useState(false);
   const [imgError, setImgError] = useState(false);
-  const { addItem } = useCart();
+  const navigate = useNavigate();
 
   const item = listing || product || {};
   const {
@@ -107,9 +108,12 @@ export default function ProductCard({ listing, product }) {
         {/* Actions */}
         <div className="flex gap-2 pt-1">
           <button
-            onClick={() => addItem(item)}
+            onClick={() => {
+              toast.success("Proceeding to checkout");
+              navigate(`/item/${id}?buy=1`);
+            }}
             className="flex-1 btn-primary text-xs py-1.5"
-            aria-label={`Add ${title} to cart`}
+            aria-label={`Buy ${title} now`}
           >
             Buy Now
           </button>

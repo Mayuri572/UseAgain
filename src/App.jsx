@@ -12,7 +12,7 @@ import Register from "./pages/Register.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import AddProduct from "./pages/AddProduct.jsx";
 import ProductDetails from "./pages/ProductDetails.jsx";
-import OrdersPage from "./pages/OrdersPage.jsx";
+import Cart from "./pages/Cart.jsx";
 import Wishlist from "./pages/Wishlist.jsx";
 import Swap from "./pages/Swap.jsx";
 import RewardStore from "./pages/RewardStore.jsx";
@@ -47,7 +47,7 @@ export default function App() {
                   <Route path="/item/:id" element={<ProductDetails />} />
                   <Route path="/swap" element={<Swap />} />
                   <Route path="/rewards" element={<RewardStore />} />
-                  <Route path="/cart" element={<OrdersPage />} />
+                  <Route path="/cart" element={<Cart />} />
                   <Route path="/wishlist" element={<Wishlist />} />
                   <Route path="/dashboard" element={
                     <ProtectedRoute><Dashboard /></ProtectedRoute>

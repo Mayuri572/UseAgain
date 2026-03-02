@@ -15,6 +15,7 @@ export default function ProductDetails() {
   const { id } = useParams()
   const [searchParams] = useSearchParams()
   const openChat = searchParams.get('chat') === '1'
+  const openBuy = searchParams.get('buy') === '1'
 
   const { user } = useAuth()
   const { addToCart, items } = useCart()
@@ -24,7 +25,7 @@ export default function ProductDetails() {
   const [product, setProduct] = useState(null)
   const [loading, setLoading] = useState(true)
   const [showChat, setShowChat] = useState(openChat)
-  const [showBuyModal, setShowBuyModal] = useState(false)
+  const [showBuyModal, setShowBuyModal] = useState(openBuy)
   const [showSwapModal, setShowSwapModal] = useState(false)
   const [paymentMethod, setPaymentMethod] = useState('cash')
   const [swapDescription, setSwapDescription] = useState('')
@@ -34,6 +35,10 @@ export default function ProductDetails() {
   useEffect(() => {
     loadProduct()
   }, [id])
+
+  useEffect(() => {
+    if (openBuy) setShowBuyModal(true)
+  }, [openBuy])
 
   useEffect(() => {
     if (product) {
@@ -244,11 +249,11 @@ export default function ProductDetails() {
           {/* Action Buttons */}
           <div className="space-y-3">
             <div className="grid grid-cols-2 gap-3">
-              <button onClick={() => { if (!user) { navigate('/login'); return }; setShowBuyModal(true) }}
+              <button onClick={() => { if (!user) { navigate('/login'); return }; toast.success('Proceeding to checkout'); setShowBuyModal(true) }}
                 className="py-3 bg-primary text-white rounded-xl font-semibold hover:bg-primary-dark transition shadow-sm hover:shadow">
                 Buy Now
               </button>
-              <button onClick={() => { addToCart(product); toast.success('Added to cart!') }}
+              <button onClick={() => { addToCart(product) }}
                 disabled={inCart}
                 className={`py-3 rounded-xl font-semibold border-2 transition ${inCart ? 'border-gray-200 text-gray-400 bg-gray-50' : 'border-primary text-primary hover:bg-primary/5'}`}>
                 <span className="flex items-center justify-center gap-1.5">
